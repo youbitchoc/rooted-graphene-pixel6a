@@ -19,7 +19,7 @@
 if [[ -n "${DEBUG}" ]]; then set -x; fi
 
 # Mandatory params
-: "${DEVICE_ID:=}" # See here for device IDs https://grapheneos.org/releases
+: "${DEVICE_ID:=bluejay}" # See here for device IDs https://grapheneos.org/releases
 : "${GITHUB_TOKEN:=}"
 : "${GITHUB_REPO:=}"
 
