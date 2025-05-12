@@ -2,34 +2,34 @@
 
 # Requires git, jq, and curl
 
-KEY_AVB=${KEY_AVB:-avb.key}
-KEY_OTA=${KEY_OTA:-ota.key}
-CERT_OTA=${CERT_OTA:-ota.crt}
+: "${KEY_AVB:=avb.key}"
+: "${KEY_OTA:=ota.key}"
+: "${CERT_OTA:=ota.crt}"
 # Or else, set these env vars
-KEY_AVB_BASE64=${KEY_AVB_BASE64:-''}
-KEY_OTA_BASE64=${KEY_OTA_BASE64:-''}
-CERT_OTA_BASE64=${CERT_OTA_BASE64:-''}
+: "${KEY_AVB_BASE64:=}"
+: "${KEY_OTA_BASE64:=}"
+: "${CERT_OTA_BASE64:=}"
 
 # Set these env vars, or else these params will be queries interactively
 # PASSPHRASE_AVB
 # PASSPHRASE_OTA
 
 # Enable debug output only after sensitive vars have been set, to reduce risk of leak
-DEBUG=${DEBUG:-''}
+: "${DEBUG:=}"
 if [[ -n "${DEBUG}" ]]; then set -x; fi
 
 # Mandatory params
-DEVICE_ID=${DEVICE_ID:-} # See here for device IDs https://grapheneos.org/releases
-GITHUB_TOKEN=${GITHUB_TOKEN:-''}
-GITHUB_REPO=${GITHUB_REPO:-''}
+: "${DEVICE_ID:=}" # See here for device IDs https://grapheneos.org/releases
+: "${GITHUB_TOKEN:=}"
+: "${GITHUB_REPO:=}"
 
 # Optional
 # If you want an OTA patched with magisk, set the preinit for your device
-MAGISK_PREINIT_DEVICE=${MAGISK_PREINIT_DEVICE:-}
+: "${MAGISK_PREINIT_DEVICE:=}"
 # Skip creation of rootless OTA by setting to "true"
-SKIP_ROOTLESS=${SKIP_ROOTLESS:-'false'}
+: "${SKIP_ROOTLESS:=false}"
 # https://grapheneos.org/releases#stable-channel
-OTA_VERSION=${OTA_VERSION:-'latest'}
+: "${OTA_VERSION:=latest}"
 
 # It's recommended to pin magisk version in combination with AVB_ROOT_VERSION.
 # Breaking changes in magisk might need to be adapted in new avbroot version
@@ -37,15 +37,15 @@ OTA_VERSION=${OTA_VERSION:-'latest'}
 # curl --fail -sL -I -o /dev/null -w '%{url_effective}' https://github.com/topjohnwu/Magisk/releases/latest | sed 's/.*\/tag\///;'
 # renovate: datasource=github-releases packageName=topjohnwu/Magisk versioning=semver-coerced
 DEFAULT_MAGISK_VERSION=v28.1
-MAGISK_VERSION=${MAGISK_VERSION:-${DEFAULT_MAGISK_VERSION}}
+: "${MAGISK_VERSION:=${DEFAULT_MAGISK_VERSION}}"
 
-SKIP_CLEANUP=${SKIP_CLEANUP:-''}
+: "${SKIP_CLEANUP:=}"
 
 # For committing to GH pages in different repo, clone it to a different folder and set this var
-PAGES_REPO_FOLDER=${PAGES_REPO_FOLDER:-''}
+: "${PAGES_REPO_FOLDER:=}"
 
 # Set asset released by this script to latest version, even when OTA_VERSION already exists for this device
-FORCE_OTA_SERVER_UPLOAD=${FORCE_OTA_SERVER_UPLOAD:-'false'}
+: "${FORCE_OTA_SERVER_UPLOAD:=false}"
 # Forces the artifacts to be built (and uploaded to a release)
 # even it a release already contains the combination of device and flavor.
 # This will lead to multiple artifacts with different commits on the release (that are not linked in the OTA server and thus are likely never used).
@@ -53,17 +53,17 @@ FORCE_OTA_SERVER_UPLOAD=${FORCE_OTA_SERVER_UPLOAD:-'false'}
 # So these artifacts are just a waste of storage resources. Example
 # shiba-2025020500-3e0add9-rootless.zip
 # shiba-2025020500-6718632-rootless.zip
-FORCE_BUILD=${FORCE_BUILD:-'false'}
+: "${FORCE_BUILD:=false}"
 # Skip setting asset released by this script to latest version, even when OTA_VERSION is latest for this device
 # Takes precedence over FORCE_OTA_SERVER_UPLOAD
-SKIP_OTA_SERVER_UPLOAD=${SKIP_OTA_SERVER_UPLOAD:-'false'}
+: "${SKIP_OTA_SERVER_UPLOAD:=false}"
 # Skip patching modules (custota and oemunlockunboot) into OTA
-SKIP_MODULES=${SKIP_MODULES:-'false'}
+: "${SKIP_MODULES:=false}"
 # Upload OTA to test folder on OTA server
-UPLOAD_TEST_OTA=${UPLOAD_TEST_OTA:-false}
+: "${UPLOAD_TEST_OTA:=false}"
 
-OTA_CHANNEL=${OTA_CHANNEL:-stable} # Alternative: 'alpha'
-NO_COLOR=${NO_COLOR:-''}
+: "${OTA_CHANNEL:=stable}" # Alternative: alpha
+: "${NO_COLOR:=}"
 OTA_BASE_URL="https://releases.grapheneos.org"
 
 # renovate: datasource=github-releases packageName=chenxiaolong/avbroot versioning=semver
@@ -257,7 +257,7 @@ function findLatestVersion() {
   if [[ "$OTA_VERSION" == 'latest' ]]; then
     OTA_VERSION=$(curl --fail -sL "$OTA_BASE_URL/$DEVICE_ID-$OTA_CHANNEL" | head -n1 | awk '{print $1;}')
   fi
-  GRAPHENE_TYPE=${GRAPHENE_TYPE:-'ota_update'} # Other option: factory
+  : "${GRAPHENE_TYPE:=ota_update}" # Other option: factory
   OTA_TARGET="$DEVICE_ID-$GRAPHENE_TYPE-$OTA_VERSION"
   OTA_URL="$OTA_BASE_URL/$OTA_TARGET.zip"
   # e.g.  shiba-ota_update-2023121200
