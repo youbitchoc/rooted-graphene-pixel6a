@@ -1,13 +1,9 @@
 rooted-graphene
 ===
 
-GrapheneOS over the air updates (OTAs) patched with Magisk allowing for AVB and locked bootloader *and* root access.  
+GrapheneOS over the air updates (OTAs) patched with [pixincreate's fork of Magisk](https://github.com/pixincreate/Magisk) allowing for AVB and locked bootloader *and* root access + zygisk.
 Can be upgraded over the air using [Custota](https://github.com/chenxiaolong/Custota) and its own OTA server.  
 Allows for switching between magisk and rootless via OTA upgrades.
-
-> ⚠️ OS and root work in general. However, zygisk does not (and [likely never will](https://github.com/topjohnwu/Magisk/pull/7606)) 
-> work, leading to magisk being easily discovered by other apps and lots of banking apps not working.  
- See [bellow](#using-other-rooting-mechanisms) for alternatives.
 
 ## Supported devices
 
